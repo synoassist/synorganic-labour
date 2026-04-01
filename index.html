@@ -266,7 +266,7 @@ function submitLogin() {
   document.getElementById("loginScreen").style.transition = "opacity 0.3s";
   setTimeout(function() { document.getElementById("loginScreen").style.display = "none"; }, 300);
 
-  document.getElementById("roleBadge").textContent = role === "admin" ? "Admin — Anshul" : "Attendance Entry";
+  document.getElementById("roleBadge").textContent = role === "admin" ? "Admin - Anshul" : "Attendance Entry";
 
   if (role === "admin") {
     document.querySelectorAll(".admin-only").forEach(function(el) { el.classList.remove("hidden"); });
@@ -379,7 +379,7 @@ function renderDashboard() {
     sc(ot, "Overtime", "s-blue") +
     sc(absent, "Absent", "s-red") +
     '</div>' +
-    '<div class="card"><div class="card-title">Today — ' + today + '</div>' +
+    '<div class="card"><div class="card-title">Today - ' + today + '</div>' +
     (attMarked
       ? '<p style="color:var(--green);font-size:13px">✅ Attendance marked today.</p>'
       : '<p style="color:var(--orange);font-size:13px">⚠️ Not marked yet. <button class="btn btn-primary btn-sm" onclick="switchTab(\'attendance\')">Mark Now</button></p>'
@@ -791,7 +791,7 @@ function calcAndRenderWages() {
   }).join("");
 
   document.getElementById("wageTable").innerHTML =
-    '<div class="info-box">Slab rate applied based on days present. Full attendance = ' + workingDays + ' days → ₹' + fmt(bonus) + ' bonus.</div>' +
+    '<div class="info-box">Slab rate applied based on days present. Full attendance = ' + workingDays + ' days -> ₹' + fmt(bonus) + ' bonus.</div>' +
     '<div class="table-wrap"><table><thead><tr>' +
     '<th>Labour</th><th>Days</th><th>OT hrs</th><th>Rate/day</th><th>Basic</th><th>OT Pay</th><th>Bonus</th><th>Total</th><th>Advance</th><th>Net Pay</th>' +
     '</tr></thead><tbody>' + trows +
