@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Synorganic Labour Management</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --navy: #094882; --navy-dark: #063460; --navy-light: #e8f0fb;
+  --yellow: #f6f710; --green: #1db954; --orange: #f39c12;
+  --red: #e74c3c; --blue: #3498db; --bg: #f0f4f9;
+  --card: #fff; --text: #1a2332; --muted: #6b7a8d;
+  --border: #dce4ef; --radius: 10px; --shadow: 0 2px 12px rgba(9,72,130,0.10);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+.header { background: var(--navy); color: #fff; padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.2); }
+.header-title { font-family: 'Rajdhani', sans-serif; font-size: 16px; font-weight: 700; letter-spacing: 0.5px; color: var(--yellow); line-height: 1; }
+.header-sub { font-size: 10px; opacity: 0.65; margin-top: 2px; }
+.header-right { text-align: right; }
+.header-date { font-size: 11px; opacity: 0.75; }
+.role-badge { font-size: 10px; background: rgba(246,247,16,0.2); color: var(--yellow); padding: 2px 8px; border-radius: 20px; margin-top: 3px; display: inline-block; }
+
+.nav { background: var(--navy-dark); display: flex; overflow-x: auto; scrollbar-width: none; }
+.nav::-webkit-scrollbar { display: none; }
+.nav-btn { flex: 0 0 auto; padding: 10px 14px; color: rgba(255,255,255,0.55); border: none; background: none; cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 500; white-space: nowrap; border-bottom: 3px solid transparent; transition: all 0.2s; }
+.nav-btn:hover { color: #fff; }
+.nav-btn.active { color: var(--yellow); border-bottom-color: var(--yellow); }
+.nav-btn.hidden { display: none; }
+
+.body { padding: 14px; max-width: 960px; margin: 0 auto; }
+
+.card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 14px; margin-bottom: 12px; }
+.card-title { font-family: 'Rajdhani', sans-serif; font-size: 15px; font-weight: 600; color: var(--navy); margin-bottom: 12px; padding-bottom: 8px; border-bottom: 2px solid var(--navy-light); display: flex; align-items: center; justify-content: space-between; }
+
+.stat-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 12px; }
+@media(min-width:480px) { .stat-grid { grid-template-columns: repeat(4, 1fr); } }
+.stat-card { border-radius: var(--radius); padding: 12px 10px; text-align: center; }
+.stat-card .val { font-family: 'Rajdhani', sans-serif; font-size: 26px; font-weight: 700; line-height: 1; }
+.stat-card .lbl { font-size: 10px; margin-top: 3px; }
+.s-navy   { background: var(--navy); color: var(--yellow); } .s-navy .lbl { color: rgba(255,255,255,0.65); }
+.s-green  { background: #e8f8f0; } .s-green .val { color: var(--green); } .s-green .lbl { color: var(--muted); }
+.s-orange { background: #fef5e7; } .s-orange .val { color: var(--orange); } .s-orange .lbl { color: var(--muted); }
+.s-red    { background: #fdf0ee; } .s-red .val { color: var(--red); } .s-red .lbl { color: var(--muted); }
+.s-blue   { background: #eaf4fd; } .s-blue .val { color: var(--blue); } .s-blue .lbl { color: var(--muted); }
+.s-yellow { background: var(--navy); color: var(--yellow); } .s-yellow .lbl { color: rgba(255,255,255,0.65); }
+
+.form-row { margin-bottom: 10px; }
+.form-label { font-size: 11px; font-weight: 500; color: var(--muted); margin-bottom: 3px; display: block; }
+.form-input, .form-select { width: 100%; padding: 8px 11px; border: 1.5px solid var(--border); border-radius: 7px; font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--text); background: #fff; outline: none; transition: border-color 0.2s; }
+.form-input:focus, .form-select:focus { border-color: var(--navy); }
+.form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+
+.btn { padding: 8px 16px; border-radius: 7px; border: none; cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; transition: all 0.15s; }
+.btn-primary { background: var(--navy); color: #fff; } .btn-primary:hover { background: var(--navy-dark); }
+.btn-yellow { background: var(--yellow); color: var(--navy); font-weight: 700; }
+.btn-ghost { background: transparent; border: 1.5px solid var(--border); color: var(--text); } .btn-ghost:hover { border-color: var(--navy); color: var(--navy); }
+.btn-danger { background: #fdf0ee; color: var(--red); border: 1.5px solid #f5c6c2; }
+.btn-sm { padding: 5px 11px; font-size: 11px; }
+.btn-full { width: 100%; }
+
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 12px; }
+thead tr { background: var(--navy); color: #fff; }
+thead th { padding: 9px 8px; text-align: left; font-weight: 600; white-space: nowrap; }
+tbody tr { border-bottom: 1px solid var(--border); }
+tbody tr:hover { background: var(--navy-light); }
+tbody td { padding: 8px; vertical-align: middle; }
+.total-row td { font-weight: 700; background: var(--navy-light); color: var(--navy); }
+
+.badge { display: inline-block; padding: 2px 8px; border-radius: 20px; font-size: 10px; font-weight: 600; }
+.badge-P { background: #e8f8f0; color: var(--green); }
+.badge-H { background: #fef5e7; color: var(--orange); }
+.badge-OT{ background: #eaf4fd; color: var(--blue); }
+.badge-A { background: #fdf0ee; color: var(--red); }
+.badge-yes { background: #e8f8f0; color: var(--green); }
+.badge-no  { background: #fdf0ee; color: var(--red); }
+
+/* Attendance Roster */
+.roster-section-title { font-family: 'Rajdhani', sans-serif; font-size: 13px; font-weight: 600; color: var(--muted); padding: 8px 0 4px; border-bottom: 1px solid var(--border); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+.roster-row { display: flex; align-items: center; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border); gap: 8px; }
+.roster-name { font-weight: 500; font-size: 13px; flex: 1; }
+.status-btns { display: flex; gap: 3px; flex-shrink: 0; }
+.status-btn { padding: 4px 8px; border-radius: 5px; border: 1.5px solid var(--border); background: #fff; font-size: 11px; font-weight: 600; cursor: pointer; transition: all 0.12s; color: var(--muted); }
+.status-btn.sel-P  { background: var(--green);  color: #fff; border-color: var(--green); }
+.status-btn.sel-H  { background: var(--orange); color: #fff; border-color: var(--orange); }
+.status-btn.sel-OT { background: var(--blue);   color: #fff; border-color: var(--blue); }
+.status-btn.sel-A  { background: var(--red);    color: #fff; border-color: var(--red); }
+.status-btn.sel-L  { background: var(--muted);  color: #fff; border-color: var(--muted); }
+.ot-input { width: 52px; padding: 4px 5px; border: 1.5px solid var(--border); border-radius: 5px; font-size: 11px; text-align: center; }
+
+/* PIN & Login */
+.login-screen { position: fixed; inset: 0; background: var(--navy); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 9999; }
+.login-logo { font-family: 'Rajdhani', sans-serif; font-size: 24px; font-weight: 700; color: var(--yellow); letter-spacing: 1px; text-align: center; margin-bottom: 4px; }
+.login-sub { font-size: 12px; color: rgba(255,255,255,0.6); margin-bottom: 32px; }
+.login-box { background: #fff; border-radius: 14px; padding: 24px 20px; width: 280px; text-align: center; }
+.login-title { font-family: 'Rajdhani', sans-serif; font-size: 16px; font-weight: 600; color: var(--navy); margin-bottom: 16px; }
+.role-select-btns { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+.role-btn { padding: 10px; border-radius: 8px; border: 1.5px solid var(--border); background: #fff; cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; transition: all 0.15s; color: var(--text); }
+.role-btn:hover { border-color: var(--navy); color: var(--navy); }
+.role-btn.selected { background: var(--navy); color: #fff; border-color: var(--navy); }
+.pin-input { width: 100%; padding: 10px; text-align: center; font-size: 22px; letter-spacing: 8px; border: 2px solid var(--border); border-radius: 8px; outline: none; margin-bottom: 8px; }
+.pin-input:focus { border-color: var(--navy); }
+.pin-err { color: var(--red); font-size: 11px; min-height: 14px; margin-bottom: 8px; }
+
+.overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 999; }
+.pin-box { background: #fff; border-radius: 14px; padding: 24px 20px; width: 260px; text-align: center; }
+.pin-box-title { font-family: 'Rajdhani', sans-serif; font-size: 16px; font-weight: 700; color: var(--navy); margin-bottom: 12px; }
+
+.toast { position: fixed; bottom: 18px; left: 50%; transform: translateX(-50%); background: var(--navy); color: #fff; padding: 9px 18px; border-radius: 30px; font-size: 12px; z-index: 9999; box-shadow: 0 4px 16px rgba(0,0,0,0.2); animation: fadeUp 0.2s ease; white-space: nowrap; }
+.toast.err { background: var(--red); }
+.toast.ok  { background: #1db954; }
+@keyframes fadeUp { from { opacity:0; transform:translateX(-50%) translateY(8px); } to { opacity:1; transform:translateX(-50%) translateY(0); } }
+
+.loader { text-align: center; padding: 30px; color: var(--muted); font-size: 13px; }
+.spinner { width: 26px; height: 26px; border: 3px solid var(--border); border-top-color: var(--navy); border-radius: 50%; animation: spin 0.7s linear infinite; margin: 0 auto 8px; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.empty { text-align: center; padding: 24px; color: var(--muted); font-size: 12px; }
+.month-picker { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
+hr.div { border: none; border-top: 1px solid var(--border); margin: 12px 0; }
+.section-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+.info-box { background: var(--navy-light); border-radius: 8px; padding: 10px 14px; font-size: 12px; color: var(--navy); margin-bottom: 12px; }
+</style>
+</head>
+<body>
+
+<!-- LOGIN SCREEN -->
+<div class="login-screen" id="loginScreen">
+  <div class="login-logo">SYNORGANIC PAINTS PVT LTD</div>
+  <div class="login-sub">Labour Management System</div>
+  <div class="login-box">
+    <div class="login-title">Select your role</div>
+    <div class="role-select-btns">
+      <button class="role-btn" onclick="selectRole('attendance')" id="roleAttendance">📋 Attendance Entry<br/><small style="font-weight:400;opacity:0.7">(Anand / Aayush)</small></button>
+      <button class="role-btn" onclick="selectRole('admin')" id="roleAdmin">🔐 Admin<br/><small style="font-weight:400;opacity:0.7">(Anshul)</small></button>
+    </div>
+    <input class="pin-input" type="password" id="loginPin" maxlength="8" placeholder="••••" style="display:none"/>
+    <div class="pin-err" id="loginErr"></div>
+    <button class="btn btn-primary btn-full" id="loginBtn" onclick="submitLogin()" style="display:none">Enter</button>
+  </div>
+</div>
+
+<!-- HEADER -->
+<div class="header">
+  <div>
+    <div class="header-title">SYNORGANIC PAINTS PVT LTD</div>
+    <div class="header-sub">Labour Management System</div>
+  </div>
+  <div class="header-right">
+    <div class="header-date" id="hdrDate"></div>
+    <div class="role-badge" id="roleBadge"></div>
+  </div>
+</div>
+
+<!-- NAV -->
+<div class="nav">
+  <button class="nav-btn active" data-tab="dashboard">▦ Dashboard</button>
+  <button class="nav-btn" data-tab="attendance">📋 Attendance</button>
+  <button class="nav-btn admin-only hidden" data-tab="labours">👷 Labour Master</button>
+  <button class="nav-btn admin-only hidden" data-tab="advances">💰 Advances</button>
+  <button class="nav-btn admin-only hidden" data-tab="wages">📊 Wage Sheet</button>
+  <button class="nav-btn admin-only hidden" data-tab="settings">⚙️ Settings</button>
+</div>
+
+<!-- BODY -->
+<div class="body">
+  <div id="tab-dashboard"></div>
+  <div id="tab-attendance" style="display:none"></div>
+  <div id="tab-labours"    style="display:none"></div>
+  <div id="tab-advances"   style="display:none"></div>
+  <div id="tab-wages"      style="display:none"></div>
+  <div id="tab-settings"   style="display:none"></div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast" style="display:none"></div>
+
+<script>
+// ── CONFIG ────────────────────────────────────────────────────
+var SB_URL = "https://sbwemsayokdljeplogdy.supabase.co";
+var SB_KEY = "sb_publishable_wNlQyccvFLCAJQ0anvt3-g_Lp6FMFlq";
+var PINS = { attendance: "1111", admin: "2222" }; // Change these
+
+// ── STATE ─────────────────────────────────────────────────────
+var role = null; // 'attendance' or 'admin'
+var selectedRole = null;
+var store = { labours: [], attendance: {}, advances: [], slabs: [], monthConfig: {} };
+var state = { activeTab: "dashboard", today: new Date().toISOString().split("T")[0], attRows: {}, editingLabour: null };
+
+// ── SUPABASE API ──────────────────────────────────────────────
+function sbFetch(path, opts) {
+  return fetch(SB_URL + "/rest/v1/" + path, Object.assign({
+    headers: {
+      "apikey": SB_KEY,
+      "Authorization": "Bearer " + SB_KEY,
+      "Content-Type": "application/json",
+      "Prefer": "return=representation"
+    }
+  }, opts)).then(function(r) {
+    if (!r.ok) return r.text().then(function(t) { throw new Error(t); });
+    var ct = r.headers.get("content-type") || "";
+    return ct.includes("json") ? r.json() : [];
+  });
+}
+
+function sbGet(table, params) {
+  return sbFetch(table + (params ? "?" + params : ""), { method: "GET" });
+}
+
+function sbInsert(table, data) {
+  return sbFetch(table, { method: "POST", body: JSON.stringify(data) });
+}
+
+function sbUpsert(table, data, onConflict) {
+  return sbFetch(table + "?on_conflict=" + (onConflict||"id"), {
+    method: "POST",
+    headers: { "apikey": SB_KEY, "Authorization": "Bearer " + SB_KEY, "Content-Type": "application/json", "Prefer": "resolution=merge-duplicates,return=representation" },
+    body: JSON.stringify(data)
+  });
+}
+
+function sbUpdate(table, filter, data) {
+  return sbFetch(table + "?" + filter, { method: "PATCH", body: JSON.stringify(data) });
+}
+
+function sbDelete(table, filter) {
+  return sbFetch(table + "?" + filter, { method: "DELETE" });
+}
+
+function auditLog(action, detail) {
+  sbInsert("audit_log", { action: action, detail: detail, done_by: role }).catch(function(){});
+}
+
+// ── LOGIN ─────────────────────────────────────────────────────
+function selectRole(r) {
+  selectedRole = r;
+  document.querySelectorAll(".role-btn").forEach(function(b) { b.classList.remove("selected"); });
+  document.getElementById("role" + (r === "admin" ? "Admin" : "Attendance")).classList.add("selected");
+  document.getElementById("loginPin").style.display = "block";
+  document.getElementById("loginBtn").style.display = "block";
+  document.getElementById("loginPin").focus();
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+  document.getElementById("loginPin").addEventListener("keydown", function(e) {
+    if (e.key === "Enter") submitLogin();
+  });
+  var now = new Date();
+  document.getElementById("hdrDate").textContent =
+    now.toLocaleDateString("en-IN", { weekday:"short", day:"2-digit", month:"short", year:"numeric" });
+});
+
+function submitLogin() {
+  var pin = document.getElementById("loginPin").value;
+  if (!selectedRole) { document.getElementById("loginErr").textContent = "Select a role first."; return; }
+  if (pin !== PINS[selectedRole]) {
+    document.getElementById("loginErr").textContent = "Wrong PIN. Try again.";
+    document.getElementById("loginPin").value = "";
+    return;
+  }
+  role = selectedRole;
+  document.getElementById("loginScreen").style.opacity = "0";
+  document.getElementById("loginScreen").style.transition = "opacity 0.3s";
+  setTimeout(function() { document.getElementById("loginScreen").style.display = "none"; }, 300);
+
+  document.getElementById("roleBadge").textContent = role === "admin" ? "Admin — Anshul" : "Attendance Entry";
+
+  if (role === "admin") {
+    document.querySelectorAll(".admin-only").forEach(function(el) { el.classList.remove("hidden"); });
+  }
+
+  document.querySelectorAll(".nav-btn").forEach(function(btn) {
+    btn.addEventListener("click", function() { switchTab(this.dataset.tab); });
+  });
+
+  bootLoad();
+});
+
+// ── BOOT LOAD ─────────────────────────────────────────────────
+function bootLoad() {
+  toast("Loading data…");
+  var promises = [
+    sbGet("labours", "order=name").then(function(r) { store.labours = r || []; }),
+    sbGet("attendance", "order=date.desc&limit=2000").then(function(r) { indexAttendance(r || []); }),
+    sbGet("wage_slabs", "order=category,min_days").then(function(r) { store.slabs = r || []; }),
+  ];
+  if (role === "admin") {
+    promises.push(sbGet("advances", "order=date.desc").then(function(r) { store.advances = r || []; }));
+    promises.push(sbGet("month_config", "order=month.desc").then(function(r) {
+      (r||[]).forEach(function(mc) { store.monthConfig[mc.month] = mc; });
+    }));
+  }
+  Promise.all(promises).then(function() {
+    toast("Ready ✓", "ok");
+    renderTab("dashboard");
+  }).catch(function(err) {
+    toast("Load error: " + err.message, "err");
+  });
+}
+
+function indexAttendance(records) {
+  store.attendance = {};
+  records.forEach(function(r) {
+    if (!store.attendance[r.date]) store.attendance[r.date] = {};
+    store.attendance[r.date][r.labour_id] = { status: r.status, otHours: r.ot_hours };
+  });
+}
+
+// ── TOAST ─────────────────────────────────────────────────────
+var toastTimer;
+function toast(msg, type) {
+  var el = document.getElementById("toast");
+  el.textContent = msg;
+  el.className = "toast" + (type ? " " + type : "");
+  el.style.display = "block";
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(function() { el.style.display = "none"; }, 2500);
+}
+
+// ── TABS ──────────────────────────────────────────────────────
+function switchTab(tab) {
+  if ((tab === "labours" || tab === "advances" || tab === "wages" || tab === "settings") && role !== "admin") return;
+  state.activeTab = tab;
+  document.querySelectorAll(".nav-btn").forEach(function(b) { b.classList.toggle("active", b.dataset.tab === tab); });
+  ["dashboard","attendance","labours","advances","wages","settings"].forEach(function(t) {
+    document.getElementById("tab-" + t).style.display = t === tab ? "" : "none";
+  });
+  renderTab(tab);
+}
+
+function renderTab(tab) {
+  if (tab === "dashboard")  renderDashboard();
+  if (tab === "attendance") renderAttendance();
+  if (tab === "labours")    renderLabours();
+  if (tab === "advances")   renderAdvances();
+  if (tab === "wages")      renderWages();
+  if (tab === "settings")   renderSettings();
+}
+
+// ── HELPERS ───────────────────────────────────────────────────
+function fmt(n) { return Number(n||0).toLocaleString("en-IN"); }
+function monthOf(d) { return d.substring(0,7); }
+function dailyLabours() { return store.labours.filter(function(l) { return l.active && l.labour_type === "daily"; }); }
+function salaryLabours() { return store.labours.filter(function(l) { return l.active && l.labour_type === "salary"; }); }
+function allActive() { return store.labours.filter(function(l) { return l.active; }); }
+
+function sc(val, lbl, cls) {
+  return '<div class="stat-card ' + cls + '"><div class="val">' + val + '</div><div class="lbl">' + lbl + '</div></div>';
+}
+
+// ── DASHBOARD ─────────────────────────────────────────────────
+function renderDashboard() {
+  var today = state.today;
+  var month = monthOf(today);
+  var todayMap = store.attendance[today] || {};
+  var active = allActive();
+
+  var present = 0, half = 0, ot = 0, absent = 0, marked = {};
+  Object.keys(todayMap).forEach(function(lid) {
+    marked[lid] = true;
+    var s = todayMap[lid].status;
+    if (s === "P" || s === "OT") present++;
+    if (s === "H") half++;
+    if (s === "OT") ot++;
+    if (s === "A") absent++;
+  });
+  active.forEach(function(l) { if (!marked[l.id]) absent++; });
+
+  var el = document.getElementById("tab-dashboard");
+  var attMarked = Object.keys(todayMap).length > 0;
+
+  var html = '<div class="stat-grid">' +
+    sc(active.length, "Total", "s-navy") +
+    sc(present, "Present", "s-green") +
+    sc(half, "Half Day", "s-orange") +
+    sc(ot, "Overtime", "s-blue") +
+    sc(absent, "Absent", "s-red") +
+    '</div>' +
+    '<div class="card"><div class="card-title">Today — ' + today + '</div>' +
+    (attMarked
+      ? '<p style="color:var(--green);font-size:13px">✅ Attendance marked today.</p>'
+      : '<p style="color:var(--orange);font-size:13px">⚠️ Not marked yet. <button class="btn btn-primary btn-sm" onclick="switchTab(\'attendance\')">Mark Now</button></p>'
+    ) + '</div>';
+
+  if (role === "admin") {
+    var monthWages = calcMonthWages(month);
+    var monthAdv = store.advances.filter(function(a) { return monthOf(a.date) === month; })
+      .reduce(function(s,a) { return s + Number(a.amount); }, 0);
+    html += '<div class="stat-grid">' +
+      sc("₹" + fmt(monthWages), "Month Wages", "s-yellow") +
+      sc("₹" + fmt(monthAdv), "Month Advances", "s-navy") +
+      '</div>';
+  }
+
+  el.innerHTML = html;
+}
+
+// ── ATTENDANCE ────────────────────────────────────────────────
+function renderAttendance() {
+  var el = document.getElementById("tab-attendance");
+  el.innerHTML =
+    '<div class="card"><div class="card-title">📋 Mark Attendance</div>' +
+    '<div class="form-row"><label class="form-label">Date</label>' +
+    '<input class="form-input" type="date" id="attDate" value="' + state.today + '" max="' + state.today + '" onchange="loadRoster()"/>' +
+    '</div></div><div id="attRoster"></div>';
+  loadRoster();
+}
+
+function loadRoster() {
+  var date = document.getElementById("attDate").value;
+  var existing = store.attendance[date] || {};
+  state.attRows = {};
+  allActive().forEach(function(l) {
+    state.attRows[l.id] = existing[l.id]
+      ? { status: existing[l.id].status, otHours: existing[l.id].otHours || 0 }
+      : { status: "A", otHours: 0 };
+  });
+  renderRoster(date);
+}
+
+function renderRoster(date) {
+  var daily = dailyLabours();
+  var salary = salaryLabours();
+
+  function makeRow(l) {
+    var cur = state.attRows[l.id] || { status: "A", otHours: 0 };
+    var statuses = l.labour_type === "daily" ? ["P","H","OT","A","L"] : ["P","H","A","L"];
+    var lblMap = { P:"P", H:"½", OT:"OT", A:"A", L:"L" };
+    var btns = statuses.map(function(s) {
+      return '<button class="status-btn ' + (cur.status===s?"sel-"+s:"") + '" onclick="setStatus(\'' + l.id + '\',\'' + s + '\')">' + lblMap[s] + '</button>';
+    }).join("");
+    return '<div class="roster-row" id="rr-' + l.id + '">' +
+      '<div class="roster-name">' + l.name + '</div>' +
+      '<div style="display:flex;align-items:center;gap:5px">' +
+      '<div class="status-btns">' + btns + '</div>' +
+      (l.labour_type === "daily" ? '<input class="ot-input" type="number" min="0" max="16" step="0.5" placeholder="hrs" id="ot-' + l.id + '" value="' + (cur.otHours||"") + '" style="' + (cur.status==="OT"?"":"display:none") + '" oninput="state.attRows[\'' + l.id + '\'].otHours=this.value"/>' : "") +
+      '</div></div>';
+  }
+
+  var html = '<div class="card"><div class="card-title"><span>👷 ' + date + '</span>' +
+    '<div style="display:flex;gap:6px">' +
+    '<button class="btn btn-ghost btn-sm" onclick="markAll(\'P\')">All P</button>' +
+    '<button class="btn btn-ghost btn-sm" onclick="markAll(\'A\')">All A</button>' +
+    '</div></div>';
+
+  if (daily.length) {
+    html += '<div class="roster-section-title">Daily Wage Labour (' + daily.length + ')</div>';
+    html += daily.map(makeRow).join("");
+  }
+  if (salary.length) {
+    html += '<div class="roster-section-title" style="margin-top:12px">Salary Based (' + salary.length + ')</div>';
+    html += salary.map(makeRow).join("");
+  }
+
+  html += '<hr class="div"/>' +
+    '<button class="btn btn-primary" onclick="saveAttendance()">💾 Save Attendance</button>' +
+    '</div>';
+
+  document.getElementById("attRoster").innerHTML = html;
+}
+
+function setStatus(id, status) {
+  state.attRows[id].status = status;
+  var row = document.getElementById("rr-" + id);
+  if (!row) return;
+  row.querySelectorAll(".status-btn").forEach(function(b) {
+    var s = b.textContent === "½" ? "H" : b.textContent;
+    b.className = "status-btn" + (s === status ? " sel-" + s : "");
+  });
+  var ot = document.getElementById("ot-" + id);
+  if (ot) ot.style.display = status === "OT" ? "" : "none";
+}
+
+function markAll(status) {
+  allActive().forEach(function(l) {
+    state.attRows[l.id].status = status;
+    setStatus(l.id, status);
+  });
+}
+
+function saveAttendance() {
+  var date = document.getElementById("attDate").value;
+  var records = allActive().map(function(l) {
+    var r = state.attRows[l.id] || { status: "A", otHours: 0 };
+    return { date: date, labour_id: l.id, labour_name: l.name, status: r.status, ot_hours: Number(r.otHours||0), marked_by: role };
+  });
+
+  toast("Saving…");
+  // Upsert all records
+  sbFetch("attendance?on_conflict=date,labour_id", {
+    method: "POST",
+    headers: { "apikey": SB_KEY, "Authorization": "Bearer " + SB_KEY, "Content-Type": "application/json", "Prefer": "resolution=merge-duplicates,return=representation" },
+    body: JSON.stringify(records)
+  }).then(function() {
+    // Update local store
+    store.attendance[date] = {};
+    records.forEach(function(rec) {
+      store.attendance[date][rec.labour_id] = { status: rec.status, otHours: rec.ot_hours };
+    });
+    auditLog("ATTENDANCE", "Date:" + date + " By:" + role);
+    toast("✅ Saved for " + date, "ok");
+  }).catch(function(err) { toast("Error: " + err.message, "err"); });
+}
+
+// ── LABOUR MASTER (Admin only) ────────────────────────────────
+function renderLabours() {
+  var el = document.getElementById("tab-labours");
+  el.innerHTML =
+    '<div class="section-actions"><button class="btn btn-primary btn-sm" onclick="showLabourForm(null)">+ Add Labour</button></div>' +
+    '<div id="labourFormWrap"></div>' +
+    '<div class="card"><div class="card-title">Daily Wage Labour</div>' +
+    '<div class="table-wrap"><table><thead><tr><th>Name</th><th>Category</th><th>Active</th><th></th></tr></thead>' +
+    '<tbody id="dailyTbody"></tbody></table></div></div>' +
+    '<div class="card"><div class="card-title">Salary Based</div>' +
+    '<div class="table-wrap"><table><thead><tr><th>Name</th><th>Active</th><th></th></tr></thead>' +
+    '<tbody id="salaryTbody"></tbody></table></div></div>';
+  renderLabourTable();
+}
+
+function renderLabourTable() {
+  var daily = store.labours.filter(function(l) { return l.labour_type === "daily"; });
+  var salary = store.labours.filter(function(l) { return l.labour_type === "salary"; });
+
+  var dt = document.getElementById("dailyTbody");
+  if (dt) dt.innerHTML = daily.map(function(l) {
+    return '<tr><td><strong>' + l.name + '</strong></td>' +
+      '<td><span class="badge badge-' + (l.active?"yes":"no") + '">' + l.category + '</span></td>' +
+      '<td><span class="badge badge-' + (l.active?"yes":"no") + '">' + (l.active?"YES":"NO") + '</span></td>' +
+      '<td><button class="btn btn-ghost btn-sm" onclick="showLabourForm(\'' + l.id + '\')">Edit</button></td></tr>';
+  }).join("") || '<tr><td colspan="4" class="empty">None</td></tr>';
+
+  var st = document.getElementById("salaryTbody");
+  if (st) st.innerHTML = salary.map(function(l) {
+    return '<tr><td><strong>' + l.name + '</strong></td>' +
+      '<td><span class="badge badge-' + (l.active?"yes":"no") + '">' + (l.active?"YES":"NO") + '</span></td>' +
+      '<td><button class="btn btn-ghost btn-sm" onclick="showLabourForm(\'' + l.id + '\')">Edit</button></td></tr>';
+  }).join("") || '<tr><td colspan="3" class="empty">None</td></tr>';
+}
+
+function showLabourForm(id) {
+  var l = id ? store.labours.find(function(x) { return x.id===id; }) : null;
+  state.editingLabour = l;
+  var isDaily = !l || l.labour_type === "daily";
+  var el = document.getElementById("labourFormWrap");
+  el.innerHTML =
+    '<div class="card"><div class="card-title">' + (l?"✏️ Edit":"➕ Add") + ' Labour</div>' +
+    '<div class="form-row-2">' +
+    '<div class="form-row"><label class="form-label">Name *</label><input class="form-input" id="lf-name" value="' + (l?l.name:"") + '" placeholder="Full Name"/></div>' +
+    '<div class="form-row"><label class="form-label">Type *</label><select class="form-select" id="lf-type" onchange="toggleCatField()">' +
+    '<option value="daily"' + (isDaily?" selected":"") + '>Daily Wage</option>' +
+    '<option value="salary"' + (!isDaily?" selected":"") + '>Salary Based</option>' +
+    '</select></div></div>' +
+    '<div class="form-row" id="catFieldWrap"' + (!isDaily?' style="display:none"':'') + '>' +
+    '<label class="form-label">Category</label>' +
+    '<select class="form-select" id="lf-cat">' +
+    getCategoryOptions(l ? l.category : "New") +
+    '</select></div>' +
+    '<div class="form-row"><label class="form-label">Phone</label><input class="form-input" id="lf-phone" value="' + (l?l.phone||"":"") + '" placeholder="9876543210"/></div>' +
+    (l ? '<div class="form-row"><label class="form-label">Active?</label><select class="form-select" id="lf-active"><option value="1"' + (l.active?" selected":"") + '>Yes</option><option value="0"' + (!l.active?" selected":"") + '>No</option></select></div>' : "") +
+    '<div style="display:flex;gap:8px">' +
+    '<button class="btn btn-primary" onclick="saveLabour()">💾 Save</button>' +
+    '<button class="btn btn-ghost" onclick="document.getElementById(\'labourFormWrap\').innerHTML=\'\'">Cancel</button>' +
+    '</div></div>';
+  el.scrollIntoView({ behavior: "smooth" });
+}
+
+function getCategoryOptions(selected) {
+  var cats = getUniqueCategories();
+  return cats.map(function(c) {
+    return '<option value="' + c + '"' + (c===selected?" selected":"") + '>' + c + '</option>';
+  }).join("") + '<option value="__new__">+ Add new category…</option>';
+}
+
+function getUniqueCategories() {
+  var cats = {};
+  store.labours.forEach(function(l) { if (l.category && l.labour_type === "daily") cats[l.category] = true; });
+  store.slabs.forEach(function(s) { cats[s.category] = true; });
+  var list = Object.keys(cats);
+  if (!list.length) list = ["New", "Senior"];
+  return list;
+}
+
+function toggleCatField() {
+  var type = document.getElementById("lf-type").value;
+  document.getElementById("catFieldWrap").style.display = type === "daily" ? "" : "none";
+}
+
+function saveLabour() {
+  var name = document.getElementById("lf-name").value.trim();
+  var type = document.getElementById("lf-type").value;
+  if (!name) { toast("Name required.", "err"); return; }
+
+  var catEl = document.getElementById("lf-cat");
+  var cat = catEl ? catEl.value : "Salary";
+  if (cat === "__new__") {
+    cat = prompt("Enter new category name:");
+    if (!cat) return;
+  }
+
+  var isEdit = !!state.editingLabour;
+  var data = { name: name, labour_type: type, category: type === "daily" ? cat : "Salary", phone: document.getElementById("lf-phone").value.trim() };
+  if (isEdit) data.active = document.getElementById("lf-active").value === "1";
+
+  toast("Saving…");
+  if (isEdit) {
+    sbUpdate("labours", "id=eq." + state.editingLabour.id, data).then(function() {
+      store.labours = store.labours.map(function(l) { return l.id === state.editingLabour.id ? Object.assign({}, l, data) : l; });
+      document.getElementById("labourFormWrap").innerHTML = "";
+      renderLabourTable();
+      auditLog("EDIT_LABOUR", name);
+      toast("✅ Updated", "ok");
+    }).catch(function(e) { toast(e.message, "err"); });
+  } else {
+    var id = (type === "daily" ? "L" : "S") + Date.now();
+    data.id = id;
+    data.active = true;
+    sbInsert("labours", data).then(function(r) {
+      store.labours.push(r[0] || Object.assign({}, data));
+      document.getElementById("labourFormWrap").innerHTML = "";
+      renderLabourTable();
+      auditLog("ADD_LABOUR", name);
+      toast("✅ Added", "ok");
+    }).catch(function(e) { toast(e.message, "err"); });
+  }
+}
+
+// ── ADVANCES (Admin only) ─────────────────────────────────────
+function renderAdvances() {
+  var opts = allActive().map(function(l) {
+    return '<option value="' + l.id + '" data-name="' + l.name + '">' + l.name + (l.labour_type==="salary"?" (Salary)":"") + '</option>';
+  }).join("");
+  var el = document.getElementById("tab-advances");
+  el.innerHTML =
+    '<div class="card"><div class="card-title">💰 Record Advance</div>' +
+    '<div class="form-row-2">' +
+    '<div class="form-row"><label class="form-label">Labour *</label><select class="form-select" id="adv-lab"><option value="">-- Select --</option>' + opts + '</select></div>' +
+    '<div class="form-row"><label class="form-label">Date *</label><input class="form-input" type="date" id="adv-date" value="' + state.today + '" max="' + state.today + '"/></div>' +
+    '</div><div class="form-row-2">' +
+    '<div class="form-row"><label class="form-label">Amount (₹) *</label><input class="form-input" type="number" id="adv-amt" placeholder="500"/></div>' +
+    '<div class="form-row"><label class="form-label">Note</label><input class="form-input" id="adv-note" placeholder="Reason"/></div>' +
+    '</div><button class="btn btn-primary" onclick="saveAdvance()">💾 Save Advance</button></div>' +
+    '<div class="card"><div class="card-title">📜 Advance History</div>' +
+    '<div class="month-picker"><label class="form-label" style="margin:0">Month:</label>' +
+    '<input class="form-input" type="month" id="adv-month" value="' + monthOf(state.today) + '" style="width:150px"/>' +
+    '<button class="btn btn-ghost btn-sm" onclick="renderAdvTable()">Load</button></div>' +
+    '<div id="advTable"></div></div>';
+}
+
+function saveAdvance() {
+  var sel = document.getElementById("adv-lab");
+  var labId = sel.value;
+  var labName = sel.options[sel.selectedIndex] ? sel.options[sel.selectedIndex].getAttribute("data-name") : "";
+  var amt = document.getElementById("adv-amt").value;
+  var date = document.getElementById("adv-date").value;
+  if (!labId || !amt || !date) { toast("Labour, Date, Amount required.", "err"); return; }
+  var data = { date: date, labour_id: labId, labour_name: labName, amount: Number(amt), note: document.getElementById("adv-note").value };
+  toast("Saving…");
+  sbInsert("advances", data).then(function(r) {
+    store.advances.unshift(r[0] || data);
+    document.getElementById("adv-amt").value = "";
+    document.getElementById("adv-note").value = "";
+    auditLog("ADVANCE", labName + " Rs." + amt);
+    toast("✅ Saved", "ok");
+    renderAdvTable();
+  }).catch(function(e) { toast(e.message, "err"); });
+}
+
+function renderAdvTable() {
+  var month = document.getElementById("adv-month") ? document.getElementById("adv-month").value : monthOf(state.today);
+  var filtered = store.advances.filter(function(a) { return monthOf(a.date) === month; });
+  var el = document.getElementById("advTable");
+  if (!el) return;
+  if (!filtered.length) { el.innerHTML = '<div class="empty">No advances for this month.</div>'; return; }
+  var total = filtered.reduce(function(s,a) { return s+Number(a.amount); }, 0);
+  el.innerHTML = '<div class="table-wrap"><table><thead><tr><th>Date</th><th>Labour</th><th>Amount</th><th>Note</th></tr></thead><tbody>' +
+    filtered.map(function(a) {
+      return '<tr><td>' + a.date + '</td><td>' + a.labour_name + '</td><td>₹' + fmt(a.amount) + '</td><td>' + (a.note||"-") + '</td></tr>';
+    }).join("") +
+    '<tr class="total-row"><td colspan="2">Total</td><td>₹' + fmt(total) + '</td><td></td></tr>' +
+    '</tbody></table></div>';
+}
+
+// ── WAGE SHEET (Admin only) ───────────────────────────────────
+function renderWages() {
+  var el = document.getElementById("tab-wages");
+  var month = monthOf(state.today);
+  var mc = store.monthConfig[month] || {};
+  el.innerHTML =
+    '<div class="card"><div class="card-title">📊 Monthly Wage Sheet</div>' +
+    '<div class="month-picker">' +
+    '<label class="form-label" style="margin:0">Month:</label>' +
+    '<input class="form-input" type="month" id="wage-month" value="' + month + '" style="width:150px" onchange="updateWorkingDaysField()"/>' +
+    '</div>' +
+    '<div class="form-row-2">' +
+    '<div class="form-row"><label class="form-label">Working Days This Month *</label><input class="form-input" type="number" id="wage-wdays" value="' + (mc.working_days||26) + '" min="1" max="31"/></div>' +
+    '<div class="form-row"><label class="form-label">Full Attendance Bonus (₹)</label><input class="form-input" type="number" id="wage-bonus" value="' + (mc.full_attendance_bonus||500) + '"/></div>' +
+    '</div>' +
+    '<button class="btn btn-primary btn-sm" onclick="calcAndRenderWages()">Calculate</button>' +
+    '</div>' +
+    '<div id="wageTable"><div class="empty">Set working days and click Calculate.</div></div>';
+}
+
+function updateWorkingDaysField() {
+  var month = document.getElementById("wage-month").value;
+  var mc = store.monthConfig[month] || {};
+  if (mc.working_days) document.getElementById("wage-wdays").value = mc.working_days;
+  if (mc.full_attendance_bonus) document.getElementById("wage-bonus").value = mc.full_attendance_bonus;
+}
+
+function getSlabRate(category, days) {
+  var catSlabs = store.slabs.filter(function(s) { return s.category === category; }).sort(function(a,b) { return a.min_days - b.min_days; });
+  if (!catSlabs.length) catSlabs = store.slabs.filter(function(s) { return s.category === "New"; });
+  for (var i = 0; i < catSlabs.length; i++) {
+    if (days >= catSlabs[i].min_days && days <= catSlabs[i].max_days) return catSlabs[i].rate_per_day;
+  }
+  return catSlabs.length ? catSlabs[catSlabs.length-1].rate_per_day : 430;
+}
+
+function calcMonthWages(month) {
+  var total = 0;
+  dailyLabours().forEach(function(l) {
+    var days = 0, otHours = 0;
+    Object.keys(store.attendance).forEach(function(date) {
+      if (monthOf(date) !== month) return;
+      var rec = store.attendance[date][l.id];
+      if (!rec) return;
+      if (rec.status === "P")  days += 1;
+      if (rec.status === "H")  days += 0.5;
+      if (rec.status === "OT") { days += 1; otHours += Number(rec.otHours||0); }
+    });
+    var rate = getSlabRate(l.category, days);
+    total += days * rate + otHours * rate;
+  });
+  return total;
+}
+
+function calcAndRenderWages() {
+  var month = document.getElementById("wage-month").value;
+  var workingDays = Number(document.getElementById("wage-wdays").value);
+  var bonus = Number(document.getElementById("wage-bonus").value || 500);
+
+  // Save month config
+  var mc = { month: month, working_days: workingDays, full_attendance_bonus: bonus };
+  sbFetch("month_config?on_conflict=month", { method: "POST", headers: { "apikey": SB_KEY, "Authorization": "Bearer " + SB_KEY, "Content-Type": "application/json", "Prefer": "resolution=merge-duplicates,return=representation" }, body: JSON.stringify(mc) })
+    .then(function() { store.monthConfig[month] = mc; }).catch(function(){});
+
+  var labours = dailyLabours();
+  var advMap = {};
+  store.advances.filter(function(a) { return monthOf(a.date) === month; }).forEach(function(a) {
+    advMap[a.labour_id] = (advMap[a.labour_id]||0) + Number(a.amount);
+  });
+
+  var rows = labours.map(function(l) {
+    var days = 0, otHours = 0;
+    Object.keys(store.attendance).forEach(function(date) {
+      if (monthOf(date) !== month) return;
+      var rec = store.attendance[date][l.id];
+      if (!rec) return;
+      if (rec.status === "P")  days += 1;
+      if (rec.status === "H")  days += 0.5;
+      if (rec.status === "OT") { days += 1; otHours += Number(rec.otHours||0); }
+    });
+    var rate = getSlabRate(l.category, days);
+    var basicWages = days * rate;
+    var otPay = otHours * rate;
+    var fullBonus = (days >= workingDays) ? bonus : 0;
+    var totalWages = basicWages + otPay + fullBonus;
+    var advances = advMap[l.id] || 0;
+    var netPay = totalWages - advances;
+    return { name: l.name, category: l.category, days: days, otHours: otHours, rate: rate, basicWages: basicWages, otPay: otPay, fullBonus: fullBonus, totalWages: totalWages, advances: advances, netPay: netPay };
+  });
+
+  var totals = { days:0, otHours:0, basicWages:0, otPay:0, fullBonus:0, totalWages:0, advances:0, netPay:0 };
+  rows.forEach(function(w) { Object.keys(totals).forEach(function(k) { totals[k] += w[k]; }); });
+
+  var trows = rows.map(function(w) {
+    return '<tr>' +
+      '<td><strong>' + w.name + '</strong><br/><small style="color:var(--muted)">' + w.category + '</small></td>' +
+      '<td>' + w.days + '</td><td>' + w.otHours + '</td>' +
+      '<td>₹' + fmt(w.rate) + '</td>' +
+      '<td>₹' + fmt(w.basicWages) + '</td>' +
+      '<td>₹' + fmt(w.otPay) + '</td>' +
+      '<td style="color:var(--green)">' + (w.fullBonus ? '₹' + fmt(w.fullBonus) : '-') + '</td>' +
+      '<td><strong>₹' + fmt(w.totalWages) + '</strong></td>' +
+      '<td style="color:var(--red)">₹' + fmt(w.advances) + '</td>' +
+      '<td style="color:var(--green);font-weight:700">₹' + fmt(w.netPay) + '</td>' +
+      '</tr>';
+  }).join("");
+
+  document.getElementById("wageTable").innerHTML =
+    '<div class="info-box">Slab rate applied based on days present. Full attendance = ' + workingDays + ' days → ₹' + fmt(bonus) + ' bonus.</div>' +
+    '<div class="table-wrap"><table><thead><tr>' +
+    '<th>Labour</th><th>Days</th><th>OT hrs</th><th>Rate/day</th><th>Basic</th><th>OT Pay</th><th>Bonus</th><th>Total</th><th>Advance</th><th>Net Pay</th>' +
+    '</tr></thead><tbody>' + trows +
+    '<tr class="total-row"><td>TOTAL</td><td>' + totals.days + '</td><td>' + totals.otHours + '</td><td>-</td>' +
+    '<td>₹' + fmt(totals.basicWages) + '</td><td>₹' + fmt(totals.otPay) + '</td>' +
+    '<td>₹' + fmt(totals.fullBonus) + '</td><td>₹' + fmt(totals.totalWages) + '</td>' +
+    '<td>₹' + fmt(totals.advances) + '</td><td>₹' + fmt(totals.netPay) + '</td></tr>' +
+    '</tbody></table></div>';
+}
+
+// ── SETTINGS (Admin only) ─────────────────────────────────────
+function renderSettings() {
+  var el = document.getElementById("tab-settings");
+  var cats = getUniqueCategories();
+  var slabsBycat = {};
+  cats.forEach(function(c) {
+    slabsBycat[c] = store.slabs.filter(function(s) { return s.category === c; }).sort(function(a,b) { return a.min_days - b.min_days; });
+  });
+
+  var slabHtml = cats.map(function(cat) {
+    var rows = slabsBycat[cat] || [];
+    return '<div style="margin-bottom:16px">' +
+      '<div style="font-weight:500;font-size:13px;margin-bottom:8px;color:var(--navy)">' + cat + '</div>' +
+      '<div class="table-wrap"><table><thead><tr><th>Min Days</th><th>Max Days</th><th>Rate/day (₹)</th><th></th></tr></thead><tbody>' +
+      rows.map(function(s) {
+        return '<tr><td>' + s.min_days + '</td><td>' + s.max_days + '</td>' +
+          '<td><input type="number" value="' + s.rate_per_day + '" style="width:80px;padding:4px;border:1.5px solid var(--border);border-radius:5px;font-size:12px" id="slab-' + s.id + '"/></td>' +
+          '<td><button class="btn btn-primary btn-sm" onclick="updateSlab(' + s.id + ')">Save</button></td></tr>';
+      }).join("") +
+      '</tbody></table></div></div>';
+  }).join("");
+
+  el.innerHTML =
+    '<div class="card"><div class="card-title">⚙️ Wage Slabs</div>' +
+    '<p style="font-size:12px;color:var(--muted);margin-bottom:12px">Edit daily rates per slab. Changes apply to future wage calculations.</p>' +
+    slabHtml + '</div>' +
+    '<div class="card"><div class="card-title">➕ Add New Category</div>' +
+    '<div class="form-row-2">' +
+    '<div class="form-row"><label class="form-label">Category Name</label><input class="form-input" id="new-cat-name" placeholder="e.g. Skilled"/></div>' +
+    '</div>' +
+    '<p style="font-size:12px;color:var(--muted);margin-bottom:8px">Will use same slabs as "New". You can edit rates above after adding.</p>' +
+    '<button class="btn btn-primary btn-sm" onclick="addCategory()">Add Category</button>' +
+    '</div>';
+}
+
+function updateSlab(id) {
+  var val = Number(document.getElementById("slab-" + id).value);
+  if (!val) { toast("Enter a valid rate.", "err"); return; }
+  sbUpdate("wage_slabs", "id=eq." + id, { rate_per_day: val }).then(function() {
+    store.slabs = store.slabs.map(function(s) { return s.id === id ? Object.assign({}, s, { rate_per_day: val }) : s; });
+    toast("✅ Slab updated", "ok");
+  }).catch(function(e) { toast(e.message, "err"); });
+}
+
+function addCategory() {
+  var name = document.getElementById("new-cat-name").value.trim();
+  if (!name) { toast("Enter category name.", "err"); return; }
+  var existing = store.slabs.filter(function(s) { return s.category === "New"; });
+  var newSlabs = existing.map(function(s) { return { category: name, min_days: s.min_days, max_days: s.max_days, rate_per_day: s.rate_per_day }; });
+  if (!newSlabs.length) newSlabs = [
+    { category: name, min_days: 0, max_days: 17, rate_per_day: 430 },
+    { category: name, min_days: 18, max_days: 19, rate_per_day: 460 },
+    { category: name, min_days: 20, max_days: 24, rate_per_day: 480 },
+    { category: name, min_days: 25, max_days: 31, rate_per_day: 510 },
+  ];
+  sbInsert("wage_slabs", newSlabs).then(function(r) {
+    store.slabs = store.slabs.concat(r || newSlabs);
+    toast("✅ Category added", "ok");
+    renderSettings();
+  }).catch(function(e) { toast(e.message, "err"); });
+}
+</script>
+</body>
+</html>
