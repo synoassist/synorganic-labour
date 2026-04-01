@@ -159,7 +159,7 @@ hr.div { border: none; border-top: 1px solid var(--border); margin: 12px 0; }
 <div class="nav">
   <button class="nav-btn active" data-tab="dashboard">▦ Dashboard</button>
   <button class="nav-btn" data-tab="attendance">📋 Attendance</button>
-  <button class="nav-btn admin-only hidden" data-tab="labours">👷 Labour Master</button>
+  <button class="nav-btn admin-only hidden" data-tab="labours">👷 Personnel Master</button>
   <button class="nav-btn admin-only hidden" data-tab="advances">💰 Advances</button>
   <button class="nav-btn admin-only hidden" data-tab="wages">📊 Wage Sheet</button>
   <button class="nav-btn admin-only hidden" data-tab="settings">⚙️ Settings</button>
@@ -447,7 +447,7 @@ function renderRoster(date) {
     '</div></div>';
 
   if (daily.length) {
-    html += '<div class="roster-section-title">Daily Wage Labour (' + daily.length + ')</div>';
+    html += '<div class="roster-section-title">Daily Wage Personnel (' + daily.length + ')</div>';
     html += daily.map(makeRow).join("");
   }
   if (salary.length) {
@@ -509,9 +509,9 @@ function saveAttendance() {
 function renderLabours() {
   var el = document.getElementById("tab-labours");
   el.innerHTML =
-    '<div class="section-actions"><button class="btn btn-primary btn-sm" onclick="showLabourForm(null)">+ Add Labour</button></div>' +
+    '<div class="section-actions"><button class="btn btn-primary btn-sm" onclick="showLabourForm(null)">+ Add Personnel</button></div>' +
     '<div id="labourFormWrap"></div>' +
-    '<div class="card"><div class="card-title">Daily Wage Labour</div>' +
+    '<div class="card"><div class="card-title">Daily Wage Personnel</div>' +
     '<div class="table-wrap"><table><thead><tr><th>Name</th><th>Category</th><th>Active</th><th></th></tr></thead>' +
     '<tbody id="dailyTbody"></tbody></table></div></div>' +
     '<div class="card"><div class="card-title">Salary Based</div>' +
@@ -529,14 +529,16 @@ function renderLabourTable() {
     return '<tr><td><strong>' + l.name + '</strong></td>' +
       '<td><span class="badge badge-' + (l.active?"yes":"no") + '">' + l.category + '</span></td>' +
       '<td><span class="badge badge-' + (l.active?"yes":"no") + '">' + (l.active?"YES":"NO") + '</span></td>' +
-      '<td><button class="btn btn-ghost btn-sm" onclick="showLabourForm(\'' + l.id + '\')">Edit</button></td></tr>';
+      '<td style="display:flex;gap:4px"><button class="btn btn-ghost btn-sm" onclick="showLabourForm(\'' + l.id + '\')">Edit</button>' +
+      '<button class="btn btn-danger btn-sm" onclick="deletePersonnel(\'' + l.id + '\', \'' + l.name + '\')">Del</button></td></tr>';
   }).join("") || '<tr><td colspan="4" class="empty">None</td></tr>';
 
   var st = document.getElementById("salaryTbody");
   if (st) st.innerHTML = salary.map(function(l) {
     return '<tr><td><strong>' + l.name + '</strong></td>' +
       '<td><span class="badge badge-' + (l.active?"yes":"no") + '">' + (l.active?"YES":"NO") + '</span></td>' +
-      '<td><button class="btn btn-ghost btn-sm" onclick="showLabourForm(\'' + l.id + '\')">Edit</button></td></tr>';
+      '<td style="display:flex;gap:4px"><button class="btn btn-ghost btn-sm" onclick="showLabourForm(\'' + l.id + '\')">Edit</button>' +
+      '<button class="btn btn-danger btn-sm" onclick="deletePersonnel(\'' + l.id + '\', \'' + l.name + '\')">Del</button></td></tr>';
   }).join("") || '<tr><td colspan="3" class="empty">None</td></tr>';
 }
 
@@ -636,7 +638,7 @@ function renderAdvances() {
   el.innerHTML =
     '<div class="card"><div class="card-title">💰 Record Advance</div>' +
     '<div class="form-row-2">' +
-    '<div class="form-row"><label class="form-label">Labour *</label><select class="form-select" id="adv-lab"><option value="">-- Select --</option>' + opts + '</select></div>' +
+    '<div class="form-row"><label class="form-label">Personnel *</label><select class="form-select" id="adv-lab"><option value="">-- Select --</option>' + opts + '</select></div>' +
     '<div class="form-row"><label class="form-label">Date *</label><input class="form-input" type="date" id="adv-date" value="' + state.today + '" max="' + state.today + '"/></div>' +
     '</div><div class="form-row-2">' +
     '<div class="form-row"><label class="form-label">Amount (₹) *</label><input class="form-input" type="number" id="adv-amt" placeholder="500"/></div>' +
@@ -675,7 +677,7 @@ function renderAdvTable() {
   if (!el) return;
   if (!filtered.length) { el.innerHTML = '<div class="empty">No advances for this month.</div>'; return; }
   var total = filtered.reduce(function(s,a) { return s+Number(a.amount); }, 0);
-  el.innerHTML = '<div class="table-wrap"><table><thead><tr><th>Date</th><th>Labour</th><th>Amount</th><th>Note</th></tr></thead><tbody>' +
+  el.innerHTML = '<div class="table-wrap"><table><thead><tr><th>Date</th><th>Personnel</th><th>Amount</th><th>Note</th></tr></thead><tbody>' +
     filtered.map(function(a) {
       return '<tr><td>' + a.date + '</td><td>' + a.labour_name + '</td><td>₹' + fmt(a.amount) + '</td><td>' + (a.note||"-") + '</td></tr>';
     }).join("") +
@@ -793,7 +795,7 @@ function calcAndRenderWages() {
   document.getElementById("wageTable").innerHTML =
     '<div class="info-box">Slab rate applied based on days present. Full attendance = ' + workingDays + ' days -> ₹' + fmt(bonus) + ' bonus.</div>' +
     '<div class="table-wrap"><table><thead><tr>' +
-    '<th>Labour</th><th>Days</th><th>OT hrs</th><th>Rate/day</th><th>Basic</th><th>OT Pay</th><th>Bonus</th><th>Total</th><th>Advance</th><th>Net Pay</th>' +
+    '<th>Personnel</th><th>Days</th><th>OT hrs</th><th>Rate/day</th><th>Basic</th><th>OT Pay</th><th>Bonus</th><th>Total</th><th>Advance</th><th>Net Pay</th>' +
     '</tr></thead><tbody>' + trows +
     '<tr class="total-row"><td>TOTAL</td><td>' + totals.days + '</td><td>' + totals.otHours + '</td><td>-</td>' +
     '<td>₹' + fmt(totals.basicWages) + '</td><td>₹' + fmt(totals.otPay) + '</td>' +
@@ -863,6 +865,17 @@ function addCategory() {
     renderSettings();
   }).catch(function(e) { toast(e.message, "err"); });
 }
+
+function deletePersonnel(id, name) {
+  if (!confirm('Delete ' + name + ' permanently? This cannot be undone.')) return;
+  sbDelete('labours', 'id=eq.' + id).then(function() {
+    store.labours = store.labours.filter(function(l) { return l.id !== id; });
+    renderLabourTable();
+    auditLog('DELETE_PERSONNEL', name);
+    toast('Deleted: ' + name, 'ok');
+  }).catch(function(e) { toast(e.message, 'err'); });
+}
+
 </script>
 </body>
 </html>
