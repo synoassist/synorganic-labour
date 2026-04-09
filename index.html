@@ -182,7 +182,7 @@ hr.div { border: none; border-top: 1px solid var(--border); margin: 12px 0; }
 // ── CONFIG ────────────────────────────────────────────────────
 var SB_URL = "https://sbwemsayokdljeplogdy.supabase.co";
 var SB_KEY = "sb_publishable_wNlQyccvFLCAJQ0anvt3-g_Lp6FMFlq";
-var PINS = { attendance: "1111", admin: "4860" }; // Change these
+var PINS = { attendance: "1111", admin: "2222" }; // Change these
 
 // ── STATE ─────────────────────────────────────────────────────
 var role = null; // 'attendance' or 'admin'
@@ -489,12 +489,35 @@ function saveAttendance() {
   });
 
   toast("Saving…");
+
+  // Capture previous status for history
+  var prevMap = {};
+  if (store.attendance[date]) {
+    Object.keys(store.attendance[date]).forEach(function(lid) {
+      prevMap[lid] = store.attendance[date][lid].status;
+    });
+  }
+
   // Upsert all records
   sbFetch("attendance?on_conflict=date,labour_id", {
     method: "POST",
     headers: { "apikey": SB_KEY, "Authorization": "Bearer " + SB_KEY, "Content-Type": "application/json", "Prefer": "resolution=merge-duplicates,return=representation" },
     body: JSON.stringify(records)
   }).then(function() {
+    // Write to history table
+    var histRows = records.map(function(rec) {
+      return {
+        date: rec.date, labour_id: rec.labour_id, labour_name: rec.labour_name,
+        status: rec.status, ot_hours: rec.ot_hours,
+        marked_by: role, previous_status: prevMap[rec.labour_id] || null
+      };
+    });
+    sbFetch("attendance_history", {
+      method: "POST",
+      headers: { "apikey": SB_KEY, "Authorization": "Bearer " + SB_KEY, "Content-Type": "application/json", "Prefer": "return=minimal" },
+      body: JSON.stringify(histRows)
+    }).catch(function(){});
+
     // Update local store
     store.attendance[date] = {};
     records.forEach(function(rec) {
